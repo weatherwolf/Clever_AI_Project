@@ -1,4 +1,5 @@
-from game import *
+from clever.game import *
+
 class AI_Model:
     def __init__(self):
         # Initialize your AI model here (e.g., load a pre-trained model)
@@ -23,13 +24,13 @@ class AI_Model:
         return random.choice(available_spaces)
     
     def choose_reroll(self, player, boards, dice, available_spaces = None):
-        # Implement logic to choose a space for the player
+        # Implement logic to choose to reroll for the player
         # You can use your AI model or rule-based logic here
         # Replace this with your actual decision-making code
         return False
     
     def choose_plusOne(self, player, boards, dice, available_spaces = None):
-        # Implement logic to choose a space for the player
+        # Implement logic to choose to grab an extra dice for the player
         # You can use your AI model or rule-based logic here
         # Replace this with your actual decision-making code
         return None
