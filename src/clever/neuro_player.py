@@ -1,5 +1,4 @@
 import random
-import warnings
 
 from clever.dice import Dice
 from clever.space import Space
