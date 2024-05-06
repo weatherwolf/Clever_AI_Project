@@ -1,11 +1,14 @@
 from clever.space import Space
+from config import Config
 
 class Board:
+
     
     def __init__(self, color: str, all_spaces: list[Space]) -> None:
-        
-        self.color = color
-        self.all_spaces = all_spaces
+
+        self.printing: bool = Config.printing
+        self.color: str = color
+        self.all_spaces: list[Space] = all_spaces
 
     def get_color(self) -> str:
 
@@ -25,48 +28,72 @@ class Board:
         color_code = colors.get(self.color, "")  # Get color code for the dice color
 
         if color_code:
+
             return f"{color_code}{self.color}\033[0m"  # Apply color to the dice value
+
         else:
+
             return str(self.value)  
+
     
     def get_all_spaces(self) -> list[Space]:
         
         return self.all_spaces
 
+
     def cross_space(self, space: Space, dice_value: int)  -> None:
         
         space.cross(dice_value)
 
-        print(f"\nUpdated state of the {self.color} Board:")
-        for space in self.all_spaces:
-            if space.crossed:
-                print(f"\033[92m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
-            else:
-                print(f"\033[0m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
+        if self.printing:
+            
+            print(f"\nUpdated state of the {self.color} Board:")
 
-        print("\033[0m")
+            for space in self.all_spaces:
+
+                if space.crossed:
+
+                    print(f"\033[92m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
+
+                else:
+
+                    print(f"\033[0m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
+
+            print("\033[0m")
+
 
     def not_crossed_spaces(self) -> list[Space]:  
         
         not_crossed_list = []
+
         for space in self.all_spaces:
+
             if not space.crossed:
+
                 not_crossed_list.append(space)
+
+
         return not_crossed_list
 
     def get_score(self) -> int:
         
         pass
 
+
     def is_crossable(self, space: Space, dice_value: int) -> None:
         
         pass
 
+
     def available_spaces(self, dice_value) -> list[Space]:
        
         available_spaces_list = []
+
         for s in self.all_spaces:
+
             if self.is_crossable(s, dice_value):
+
                 available_spaces_list.append(s)
+
 
         return available_spaces_list

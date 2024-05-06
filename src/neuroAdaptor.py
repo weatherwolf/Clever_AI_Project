@@ -1,10 +1,10 @@
 import numpy as np
 
-from clever.player import Player
 from clever.board import Board
 from clever.space import Space
 from clever.round import Round
 from clever.dice import Dice
+from clever.neuro_player import NeuroPlayer
 
 class NeuroAdapter:
 
@@ -20,8 +20,7 @@ class NeuroAdapter:
     num_fox_count: int = num_reroll + 1
     num_score: int = num_fox_count + 1
     num_index: int = num_score + 1
-
-    num_dice: int = num_reroll + 1
+    num_dice: int = num_index + 1
 
     pack: list[float] = []
 
@@ -33,7 +32,7 @@ class NeuroAdapter:
     
     def reset(self) -> None:
 
-        player: Player = Player("temp")
+        player: NeuroPlayer = NeuroPlayer("temp")
         self.pack = []
     
 
@@ -42,29 +41,35 @@ class NeuroAdapter:
         if board.color == "Yellow":
 
             for i in range(0, self.num_yellow):
+
                 self.pack[i] = 0
 
-                if board.get_all_spaces()[i].crossed:
+                if board.all_spaces[i].crossed:
+
                     self.pack[i] = 1
 
 
         elif board.color == "Blue":
 
             for i in range(self.num_yellow, self.num_yellow + self.num_blue):
+                
                 j: int = i - self.num_yellow
                 self.pack[i] = 0
 
-                if board.get_all_spaces()[j].crossed:
+                if board.all_spaces[j].crossed:
+
                     self.pack[i] = 1
 
 
         elif board.color == "Green":
 
             for i in range(self.num_blue, self.num_blue + self.num_green):
+
                 j: int = i - self.num_blue
                 self.pack[i] = 0
 
-                if board.get_all_spaces()[j].crossed:
+                if board.all_spaces[j].crossed:
+
                     self.pack[i] = 1
 
         
@@ -73,7 +78,7 @@ class NeuroAdapter:
             for i in range(self.num_green, self.num_green + self.num_orange):
 
                 j: int = i - self.num_green
-                self.pack[i] = board.get_all_spaces()[j].dice_value/6
+                self.pack[i] = board.all_spaces[j].dice_value/6
 
         
         elif board.color == "Purple":
@@ -81,7 +86,7 @@ class NeuroAdapter:
             for i in range(self.num_orange, self.num_orange + self.num_purple):
 
                 j: int = i - self.num_orange
-                self.pack[i] = board.get_all_spaces()[j].dice_value/6
+                self.pack[i] = board.all_spaces[j].dice_value/6
 
     
     def convert_dice(self, round: Round) -> None:
@@ -89,6 +94,7 @@ class NeuroAdapter:
         total_dice: list[Dice] = round.total_dice
 
         for i in range(6):
+
             self.pack[i + self.num_dice] = total_dice[i].value / 6
 
     
@@ -97,21 +103,27 @@ class NeuroAdapter:
         if board.color == "Yellow":
 
             self.pack[space.index] = 0
+
             if space.crossed:
+
                 self.pack[space.index] = 1
 
 
         elif board.color == "Blue":
 
             self.pack[space.index + self.num_blue] = 0
+
             if space.crossed:
+
                 self.pack[space.index + self.num_blue] = 1
 
 
         elif board.color == "Green":
 
             self.pack[space.index + self.num_green] = 0
+
             if space.crossed:
+
                 self.pack[space.index + self.num_green] = 1
 
         
@@ -125,7 +137,7 @@ class NeuroAdapter:
             self.pack[space.index + self.num_purple] = space.dice_value/6
 
 
-    def convert_player(self, player: Player)-> None:
+    def convert_player(self, player: NeuroPlayer) -> None:
 
         self.pack[self.num_reroll] = player.reroll_count
         self.pack[self.num_plus_one] = player.plusOne_count
@@ -134,7 +146,7 @@ class NeuroAdapter:
         self.pack[self.num_index] = player.index
 
         
-    def convert_all(self, round: Round, player: Player) -> None:
+    def convert_all(self, round: Round, player: NeuroPlayer) -> None:
 
         for board in player.boards:
 

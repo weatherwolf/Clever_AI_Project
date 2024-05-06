@@ -19,7 +19,7 @@ class YellowBoard(Board):
 
     def check_bonus(self, space: Space)  -> list[Bonus]:
 
-        bonus_set = [BlueX, OrangeX(4), GreenX, Fox, PlusOne]
+        bonus_set = [BlueX(), OrangeX(4), GreenX(), Fox(), PlusOne()]
         bonus = []
         
         row_completed = all(self.all_spaces[int(4*np.floor(space.index/4)) + j].crossed for j in range(4))
@@ -79,7 +79,7 @@ class BlueBoard(Board):
     
     def check_bonus(self, space: Space) -> list[Bonus]:
 
-        bonus_set = [OrangeX(5), YellowX, Fox, Reroll, GreenX, PurpleX(6), PlusOne]
+        bonus_set = [OrangeX(5), YellowX(), Fox(), Reroll(), GreenX(), PurpleX(6), PlusOne()]
         bonus = []
         
         row_completed = all(self.all_spaces[int(4*np.floor(space.index/4)) + j].crossed for j in range(4))
@@ -125,7 +125,7 @@ class GreenBoard(Board):
 
     def check_bonus(self, space: Space) -> list[Bonus]:
 
-        bonus_set = [PlusOne, BlueX, Fox, PurpleX(6), Reroll]
+        bonus_set = [PlusOne(), BlueX(), Fox(), PurpleX(6), Reroll()]
         bonus = []
         
         i = space.index
@@ -164,19 +164,32 @@ class OrangeBoard(Board):
     def cross_space(self, space: Space, dice_value: int) -> None:
 
         if not space.crossed:
+
             if space == self.all_spaces[3] or space == self.all_spaces[6] or space == self.all_spaces[8]:
+
                 space.cross(2 * dice_value)
+
             elif space == self.all_spaces[10]:
+
                 space.cross(3 * dice_value)
+
             else:
+
                 space.cross(dice_value)
 
-        print(f"\nUpdated state of the {self.color} Board:")
-        for space in self.all_spaces:
-            if space.crossed:
-                print(f"\033[92m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
-            else:
-                print(f"\033[0m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
+        
+        if self.printing:
+
+            print(f"\nUpdated state of the {self.color} Board:")
+            for space in self.all_spaces:
+
+                if space.crossed:
+
+                    print(f"\033[92m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
+
+                else:
+
+                    print(f"\033[0m Space {space.index}: Crossed: {space.crossed}, Value: {space.value}, Dice Value: {space.dice_value}")
 
 
     def get_score(self) -> int:
@@ -190,7 +203,7 @@ class OrangeBoard(Board):
     
     def check_bonus(self, space: Space) -> list[Bonus]:
 
-        bonus_set = [Reroll, YellowX, PlusOne, Fox, PurpleX(6)]
+        bonus_set = [Reroll(), YellowX(), PlusOne(), Fox(), PurpleX(6)]
         bonus = []
         
         i = space.value
@@ -236,7 +249,7 @@ class PurpleBoard(Board):
     
     def check_bonus(self, space: Space) -> list[Bonus]:
 
-        bonus_set = [Reroll, BlueX, PlusOne, YellowX, Fox, Reroll, GreenX, OrangeX(6), PlusOne]
+        bonus_set = [Reroll(), BlueX(), PlusOne(), YellowX(), Fox(), Reroll(), GreenX(), OrangeX(6), PlusOne()]
         bonus = []
         
         if(space.index >= 2):

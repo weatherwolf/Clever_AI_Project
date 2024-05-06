@@ -8,7 +8,6 @@ class Crossover:
 
     _instance = None
 
-
     CROSSOVER_CHANCE: float = 0.75
     C1: float = 1.0
     C2: float = 1.0
@@ -25,8 +24,16 @@ class Crossover:
     
         return cls._instance
     
+    @staticmethod
+    def initialise():
+
+        if Crossover._instance is None:
+
+            Crossover._instance = Crossover()
     
-    def __init__():
+    
+    def __init__(self):
+        
         pass
 
 

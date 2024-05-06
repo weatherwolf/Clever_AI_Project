@@ -27,26 +27,36 @@ class Round:
     def choose_dice(self, chosen_dice: Dice, player_actions: int) -> None:
 
         if chosen_dice:
+
             if player_actions > 1:
+
                 # If the player wants multiple actions, handle multiple dice choices
                 dice_to_remove = []
                 self.chosen_dices.append(chosen_dice)
 
                 for dice in self.usable_dice:
+
                     if chosen_dice.value > dice.value:
+
                         dice_to_remove.append(dice)
 
+
                 for dice in dice_to_remove:
+
                     self.throw_away_dice.append(dice)
                     self.usable_dice.remove(dice)
                 
+
                 self.usable_dice.remove(chosen_dice)
 
             else:
+
                 # If the player wants a single action, handle the chosen dice and discard all others
                 self.chosen_dices.append(chosen_dice)
                 self.usable_dice.remove(chosen_dice)
+
                 for d in self.usable_dice:
+                    
                     self.throw_away_dice.append(d)
                     self.usable_dice.remove(d)
 

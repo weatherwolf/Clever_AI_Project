@@ -16,8 +16,21 @@ class Network:
 
         return cls._instance
     
+        
+    def __init__(self) -> None:
+        
+        pass
+
+
+    @staticmethod
+    def initialise():
+
+        if Network._instance is None:
+
+            Network._instance = Network()
     
-    def create_base_genotype(inputs: int, outputs: int) -> Genotype:
+    
+    def create_base_genotype(self, inputs: int, outputs: int) -> Genotype:
 
         network: Genotype = Genotype()
 
@@ -33,11 +46,13 @@ class Network:
 
         network.add_edge(Edge(0,inputs, 0.0, True, 0))
 
+        return network
+
         # Somehow b2studios does not add the edges to the network now
-        # This code is commented  out, must be a reason for this, but I don't know what
+        # This code is commented out, must be a reason for this, but I don't know what
 
     
-    def register_base_markings(inputs: int, outputs: int) -> None:
+    def register_base_markings(self, inputs: int, outputs: int) -> None:
 
         mutation_instance: Mutation = Mutation()
 
@@ -52,10 +67,6 @@ class Network:
 
                 mutation_instance.register_marking(info)
                 
-
-    def __init__(self) -> None:
-        pass
-
 
     def create_base_recurrent(self) -> Genotype:
 
@@ -120,6 +131,31 @@ class Network:
         return network
     
 
+    def create_base_phenotype(self, inputs: int, outputs: int) -> Phenotype:
+
+        network: Phenotype = Phenotype()
+
+        for i in range(inputs):
+
+            network.add_vertex(Vertex.EType.INPUT, i)
+
+        
+        for i in range(outputs):
+
+            network.add_vertex(Vertex.EType.INPUT, i + inputs)
+
+        
+        for i in range(inputs):
+
+            for j in range(outputs):
+
+                input: int = i
+                output: int = j
+
+                network.add_edge(input, output, 0.0, True)
+
+        
+        return network
 
 
 

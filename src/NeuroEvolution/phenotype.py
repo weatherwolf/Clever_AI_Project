@@ -14,9 +14,27 @@ class Phenotype:
         self.vertices_inputs: list[Vertex] = []
         self.vertices_outputs: list[Vertex] = []
 
+        self.score: float = 0 
+
     
     def sigmoid(x: float) -> float:
+        
         return 1/(1 + np.exp(-x))
+    
+
+    def add_vertex(self, type: Vertex.EType, index: int) -> None:
+
+        v: Vertex = Vertex(type, index)
+        self.vertices.append(v)
+
+
+    def add_edge(self, source: int, destination: int, weight: float, enabled: bool) -> None:
+
+        e: Edge = Edge(source, destination, weight, enabled)
+        self.edges.append(e)
+
+        self.vertices[e.destination].incoming.append(e)
+
     
 
     def inscribe_genotype(self, code: Genotype) -> None:
@@ -29,12 +47,12 @@ class Phenotype:
 
         for i in range(vertex_count):
 
-            self.vertices.append(code.vertices[i].index, code.vertices[i].type)
+            self.add_vertex(code.vertices[i].index, code.vertices[i].type)
 
         for i in range(edge_count):
 
             e: Edge = code.edges[i]
-            self.edges.append(e.source, e.destination, e.weight, e.enabled)
+            self.add_edge(e.source, e.destination, e.weight, e.enabled)
 
     
     def process_graph(self) -> None:
@@ -65,7 +83,7 @@ class Phenotype:
             vertex.value = 0.0
 
     
-    def propogate(self, X: list[float]) -> list[float]:
+    def propagate(self, X: list[float]) -> list[float]:
 
         repeats: int = 10
 
@@ -79,6 +97,7 @@ class Phenotype:
             for i in range(len(self.vertices)):
 
                 if self.vertices[i].type == Vertex.EType.OUTPUT:
+                    
                     continue
 
 

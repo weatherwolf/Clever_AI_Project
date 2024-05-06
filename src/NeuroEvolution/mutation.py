@@ -7,6 +7,7 @@ import random
 class Marking:
 
     def __init__(self) -> None:
+        
         self.order: int = 0
         self.source: int = 0
         self.destination: int = 0
@@ -25,6 +26,7 @@ class Mutation:
     PETRUB_CHANGE: float = 0.9
     SHIFT_STEP: float = 0.1
 
+
     @classmethod
     def get_instance(cls):
 
@@ -36,6 +38,15 @@ class Mutation:
         return cls._instance
     
     
+    @staticmethod
+    def initialise():
+
+        if Mutation._instance is None:
+
+            Mutation._instance = Mutation()
+    
+
+
     def __init__(self) -> None:
         pass
     
@@ -127,7 +138,7 @@ class Mutation:
 
             if roll < p:
 
-                self.mutate_enable(genotype)
+                self.mutation_enable(genotype)
 
             p -= 1
 
@@ -172,8 +183,8 @@ class Mutation:
                 
                 if not search:
 
-                    weight: float = random.random() * 4 - 2
-                    creation: Edge = edge(source, destination, weight, True)
+                    weight: float = random.random() * 4.0 - 2.0
+                    creation: Edge = Edge(source, destination, weight, True)
 
                     potential.append(creation)
 
@@ -183,7 +194,7 @@ class Mutation:
             return
         
 
-        selection: int = random.random()
+        selection: int = random.randint(0, len(potential) - 1)
 
         mutation: Edge = potential[selection]
         mutation.innovation = self.register_marking(mutation)
@@ -194,7 +205,7 @@ class Mutation:
     def mutate_node(self, genotype: Genotype) -> None:
 
         edgeCount: int = len(genotype.edges)
-        selection: int = random.randint(0, edgeCount)
+        selection: int = random.randint(0, edgeCount - 1)
 
         edge: Edge = genotype.edges[selection]
 
@@ -221,7 +232,7 @@ class Mutation:
         genotype.add_edge(second)
 
 
-    def mutation_enable(genotype: Genotype) -> None:
+    def mutation_enable(self, genotype: Genotype) -> None:
         
         edgeCount: int = len(genotype.edges)
         candidates: list[Edge] = []
@@ -233,18 +244,17 @@ class Mutation:
                 candidates.append(genotype.edges[i])
 
         
-        if len(candidates) > 0:
+        if len(candidates) == 0:
 
             return
         
-
-        selection: int = random.randint(0, len(candidates))
+        selection: int = random.randint(0, len(candidates) - 1)
 
         edge: Edge = candidates[selection]
         edge.enabled = True
 
     
-    def mutate_disabled(genotype: Genotype) -> None:
+    def mutate_disabled(self, genotype: Genotype) -> None:
 
         edgeCount: int = len(genotype.edges)
         candidates: list[Edge] = []
@@ -261,7 +271,7 @@ class Mutation:
             return
         
 
-        selection: int = random.randint(0, len(candidates))
+        selection: int = random.randint(0, len(candidates) - 1)
 
         edge: Edge = candidates[selection]
         edge.enabled = False
@@ -269,7 +279,7 @@ class Mutation:
     
     def mutate_weight(self, genotype: Genotype) -> None:
 
-        selection: int = random.randint(0, len(genotype.edges))
+        selection: int = random.randint(0, len(genotype.edges) - 1)
         edge: Edge = genotype.edges[selection]
 
         roll: float = random.random()
@@ -283,15 +293,15 @@ class Mutation:
             self.mutate_weight_random(edge)
 
         
-    def mutate_weight_shift(edge: Edge, step: float) -> None:
+    def mutate_weight_shift(self, edge: Edge, step: float) -> None:
 
         scalar: float = random.random() * step - step * 0.5
         edge.weight += scalar
 
     
-    def mutate_weight_random(edge: Edge) -> None:
+    def mutate_weight_random(self, edge: Edge) -> None:
 
-        value: float = random.random * 4.0 - 2.0
+        value: float = random.random() * 4.0 - 2.0
         edge.weight = value
 
 

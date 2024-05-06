@@ -5,9 +5,11 @@ from clever.bonus import Bonus
 class Reroll(Bonus):
 
     def __init__(self) -> None:
+
         super().__init__("Reroll")
 
-    def power(player) -> None:
+    
+    def power(self, player) -> None:
     
         player.set_reroll_count(player.get_reroll_count() + 1)
 
@@ -17,9 +19,11 @@ class Reroll(Bonus):
 class PlusOne(Bonus):
 
     def __init__(self) -> None:
+
         super().__init__("+1")
 
-    def power(player) -> None:
+
+    def power(self, player) -> None:
         
         player.set_plusOne_count(player.get_plusOne_count() + 1)
 
@@ -28,14 +32,21 @@ class PlusOne(Bonus):
 class YellowX(Bonus):
 
     def __init__(self) -> None:
+
         super().__init__("Yellow X")
 
-    def power(player) -> None:
+
+    def power(self, player) -> None:
         
         spaces_to_choose: list[Space] = []
+
         for board in player.boards:
+
             if board.color == "Yellow":
+
                 spaces_to_choose = board.not_crossed_spaces()
+
+
         chosen_space: Space = player.player_choose_space(spaces_to_choose)
         chosen_space.cross()
 
@@ -44,16 +55,27 @@ class YellowX(Bonus):
 class BlueX(Bonus):
 
     def __init__(self) -> None:
+
         super().__init__("Blue X")
 
-    def power(player) -> None:
+
+    def power(self, player) -> None:
         
         spaces_to_choose: list[Space] = []
+
         for board in player.boards:
+
             if board.color == "Blue":
+
                 spaces_to_choose = board.not_crossed_spaces()
+
         chosen_space: Space = player.player_choose_space(spaces_to_choose)
-        print(f"Blue bonus activated, {player.get_name()} plays the space {chosen_space}")
+
+        if self.printing:
+
+            print(f"Blue bonus activated, {player.get_name()} plays the space {chosen_space}")
+
+
         chosen_space.cross()
 
 
@@ -61,14 +83,19 @@ class BlueX(Bonus):
 class GreenX(Bonus):
 
     def __init__(self) -> None:
+
         super().__init__(f"Green X")
 
-    def power(player) -> None:
+    def power(self, player) -> None:
         
         spaces_to_choose: list[Space] = []
+
         for board in player.boards:
+
             if board.color == "Green":
+
                 spaces_to_choose = board.available_spaces(6)
+
         chosen_space: Space = player.player_choose_space(spaces_to_choose)
         chosen_space.cross()
 
@@ -77,15 +104,22 @@ class GreenX(Bonus):
 class OrangeX(Bonus):
 
     def __init__(self, number: int) -> None:
+
         self.number = number
         super().__init__(f"Orange {self.number}")
 
+
     def power(self, player) -> None:
-        
+
         spaces_to_choose: list[Space] = []
+
         for board in player.boards:
+
             if board.color == "Orange":
+
                 spaces_to_choose = board.available_spaces(self.number)
+
+
         chosen_space: Space = player.player_choose_space(spaces_to_choose)
         chosen_space.cross(self.number)
 
@@ -94,15 +128,22 @@ class OrangeX(Bonus):
 class PurpleX(Bonus):
 
     def __init__(self, number: int) -> None:
+
         self.number = number
         super().__init__("Purple {self.number}")
+
 
     def power(self, player) -> None:
         
         spaces_to_choose: list[Space] = []
+
         for board in player.boards:
+
             if board.color == "Purple":
+
                 spaces_to_choose = board.available_spaces(self.number)
+
+
         chosen_space: Space = player.player_choose_space(spaces_to_choose)
         chosen_space.cross(self.number)
         
@@ -111,9 +152,11 @@ class PurpleX(Bonus):
 class Fox(Bonus):
 
     def __init__(self) -> None:
+
         super().__init__("Fox")
     
-    def power(player) -> None:
+
+    def power(self, player) -> None:
         
         player.set_fox_count(player.get_fox_count() + 1)
 

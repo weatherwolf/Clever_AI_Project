@@ -15,9 +15,9 @@ class Population:
 
     GENERATION: int = 0
 
-    POPULATION_SIZE: int = 256
-    INPUTS: int = 126
-    OUTPUTS: int = 7
+    POPULATION_SIZE: int = 64
+    INPUTS: int = 67
+    OUTPUTS: int = 6
     MAX_STALENESS: int = 15
 
     PORTION: float = 0.2
@@ -36,6 +36,14 @@ class Population:
     
         return cls._instance
     
+
+    @staticmethod
+    def initialise():
+
+        if Population._instance is None:
+
+            Population._instance = Population()
+    
     
     def __init__(self) -> None:
         
@@ -44,7 +52,7 @@ class Population:
         self.population = []
 
 
-    def generate_base_population(self, size: int, inputs: int, outputs: int):
+    def generate_base_population(self, size: int, inputs: int, outputs: int) -> None:
 
         self.POPULATION_SIZE = size
         self.INPUTS = inputs
@@ -52,11 +60,10 @@ class Population:
 
         for i in range(self.POPULATION_SIZE):
 
-            network: Network = Network.get_instance()
+            network: Network = Network()
             genotype: Genotype = network.create_base_genotype(inputs, outputs)
 
             self.genetics.append(genotype)
-
             self.add_species(genotype)
 
         
@@ -64,14 +71,13 @@ class Population:
 
         for i in range(self.POPULATION_SIZE):
 
-            mutation_instance: Mutation = Mutation.get_instance()
-            mutation_instance.mutate_all(self.genetics[i])
+            Mutation._instance.mutate_all(self.genetics[i])
 
         
         self.inscribe_population()
 
 
-    def ner_generation(self) -> None:
+    def new_generation(self) -> None:
 
         self.calculate_adjusted_fitness()
 
@@ -133,6 +139,21 @@ class Population:
             self.genetics.clear()
 
             self.GENERATION += 1
+
+
+        
+    def calculate_adjusted_fitness(self) -> None:
+
+        species_count: int = len(self.species)
+
+        for i in range(species_count):
+
+            members_count: int = len(self.species[i].members)
+
+            for j in range(members_count):
+
+                self.species[i].members[j].adjusted_fitness = self.species[i].members[j].fitness / members_count
+
 
 
     def update_staleness(self) -> None:

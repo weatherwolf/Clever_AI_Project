@@ -50,6 +50,9 @@ class Dice:
         color_code = colors.get(self.color, "")  # Get color code for the dice color
 
         if color_code:
+
             return f"{color_code}{self.value}\033[0m"  # Apply color to the dice value
+        
         else:
+            
             return str(self.value)  # If color not found, return the plain value

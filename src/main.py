@@ -1,1 +1,3 @@
-import clever
+from program import Program
+
+Program()

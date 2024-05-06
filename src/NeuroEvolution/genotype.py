@@ -9,9 +9,14 @@ class Genotype:
         self.edges = edges
 
         self.inputs = 0
+
         for v in self.vertices:
+
             if v.type == Vertex.EType.INPUT:
+
                 self.inputs += 1
+
+        self.bracket: int = 0
 
         self.fitness = 0.0
         self.adjusted_fitness = 0.0
@@ -20,7 +25,9 @@ class Genotype:
     def add_vertex(self, v: Vertex) -> None:
         
         self.vertices.append(v)
+
         if v.type == Vertex.EType.INPUT:
+
             self.inputs += 1
 
 
@@ -32,10 +39,13 @@ class Genotype:
     def clone(self):
 
         clone = Genotype()
+
         for v in self.vertices:
+
             clone.add_vertex(v)
 
         for e in self.edges:
+
             clone.add_edge(e)
 
         return clone
@@ -50,6 +60,7 @@ class Genotype:
     def sort_vertices(self) -> None:
         
         self.vertices.sort(key=lambda v: v.index)
+
 
     def sort_edges(self) -> None:
 
